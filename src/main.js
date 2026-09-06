@@ -21,6 +21,7 @@ import { initPreloader } from './ui/preloader.js';
 import { initVideo } from './ui/video.js';
 import { initHeroIntro } from './ui/hero-intro.js';
 import { initStudioLayer } from './ui/studio-layer.js';
+import { initAsk } from './ui/ask.js';
 
 const pre = initPreloader();
 
@@ -36,6 +37,7 @@ safe('player', initPlayer);
 safe('video', initVideo);
 safe('hero-intro', initHeroIntro);
 safe('studio-layer', initStudioLayer);
+safe('ask', initAsk);
 
 /* ── WebGL, optional by design ───────────────────────────────────────────── */
 async function initGL() {

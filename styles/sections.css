@@ -1032,3 +1032,103 @@ main, .footer { position: relative; z-index: var(--z-content); }
 @media (max-width: 780px) {
   .studio__wall { width: 78%; opacity: 0.55; }
 }
+
+/* ══════════════════════ FAQ ══════════════════════
+   Native <details>/<summary>: keyboard-operable, findable by in-page search,
+   and fully readable with JavaScript off. */
+.faq { padding-block: var(--bay); }
+.faq .sec-head h2 em { color: var(--tide); }
+
+.faq__list { border-top: 1px solid var(--line); }
+
+.faq__item { border-bottom: 1px solid var(--line); }
+.faq__q {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: clamp(1rem, 3vw, 3rem);
+  padding: clamp(1.1rem, 2.2vw, 1.6rem) 0;
+  cursor: pointer; list-style: none;
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' var(--opsz-title, 40);
+  font-weight: 600; font-size: var(--step-1); line-height: 1.25;
+  color: var(--bone-dim); letter-spacing: -0.004em;
+  transition: color var(--dur) var(--ease-out);
+}
+.faq__q::-webkit-details-marker { display: none; }
+.faq__q:hover { color: var(--bone); }
+.faq__item[open] > .faq__q { color: var(--bone); }
+.faq__q:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; border-radius: 2px; }
+
+/* Plus that becomes a minus — cheaper to read than a rotating chevron. */
+.faq__mark {
+  position: relative; flex: none; width: 1.05rem; height: 1.05rem; margin-top: 0.35em;
+}
+.faq__mark::before, .faq__mark::after {
+  content: ''; position: absolute; inset-inline: 0; top: 50%;
+  height: 1.5px; background: var(--ember); border-radius: 2px;
+  transition: transform 320ms var(--ease-out), opacity 320ms var(--ease-out);
+}
+.faq__mark::after { transform: rotate(90deg); }
+.faq__item[open] .faq__mark::after { transform: rotate(0deg); opacity: 0; }
+
+.faq__a { padding-bottom: clamp(1.2rem, 2.4vw, 1.8rem); max-width: 68ch; }
+.faq__a p { color: var(--bone-faint); font-size: var(--step--1); line-height: 1.7; }
+.faq__a p + p { margin-top: 0.9em; }
+.faq__a strong { color: var(--bone-dim); font-weight: 500; }
+.faq__a em { font-family: var(--font-display); font-style: italic; color: var(--bone-dim); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq__item[open] .faq__a { animation: faqIn 420ms var(--ease-out) both; }
+  @keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+}
+
+/* ── Ask a question ─────────────────────────────────────────────── */
+.ask {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid var(--line);
+}
+@media (max-width: 860px) { .ask { grid-template-columns: 1fr; } }
+
+.ask__title { font-size: var(--step-4); color: var(--bone); margin-bottom: 0.5rem; }
+.ask__title em { font-style: italic; color: var(--ember); }
+.ask__intro p { color: var(--bone-faint); font-size: var(--step--1); max-width: 32ch; }
+
+.ask__form { display: grid; gap: 1rem; }
+.ask__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .ask__row { grid-template-columns: 1fr; } }
+
+.ask__field { display: grid; gap: 0.45rem; }
+.ask__field > span {
+  font-family: var(--font-mono); font-size: var(--step--2);
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-ghost);
+}
+.ask__field input, .ask__field textarea {
+  width: 100%;
+  font-family: var(--font-body); font-size: var(--step--1);
+  color: var(--bone);
+  background: color-mix(in oklab, var(--bone) 4%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.8em 0.95em;
+  transition: border-color var(--dur) var(--ease-out), background var(--dur) var(--ease-out);
+}
+.ask__field textarea { resize: vertical; min-height: 6.5rem; line-height: 1.55; }
+.ask__field input::placeholder, .ask__field textarea::placeholder { color: var(--bone-ghost); }
+.ask__field input:hover, .ask__field textarea:hover { border-color: var(--line-strong); }
+.ask__field input:focus, .ask__field textarea:focus {
+  outline: none; border-color: var(--ember);
+  background: color-mix(in oklab, var(--bone) 6%, transparent);
+}
+.ask__field input:focus-visible, .ask__field textarea:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+
+.ask__act { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 0.25rem; }
+.ask__status { font-family: var(--font-mono); font-size: var(--step--2); letter-spacing: 0.1em; color: var(--bone-faint); }
+.ask__status[data-state="ok"]  { color: var(--tide); }
+.ask__status[data-state="err"] { color: var(--ember-300); }
+.ask__form.is-sending .btn { opacity: 0.6; pointer-events: none; }
+
+/* Honeypot: a real field, visually gone, never announced. */
+.ask__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
