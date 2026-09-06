@@ -55,25 +55,26 @@
   position: fixed; inset-inline: 0; top: 0;
   z-index: var(--z-nav);
   padding-block: clamp(0.9rem, 1.8vw, 1.4rem);
-  /* Always-on scrim. The hero's WebGL bloom is bright on the right-hand side
-     and the mono links / sound pill vanish into it without this. */
+  /* Always-on scrim, and the bar never hides: the menu is reachable at every
+     scroll position. The hero's WebGL bloom is bright on the right-hand side,
+     so the mono links and sound pill need this ground to hold contrast. */
   background: linear-gradient(
     180deg,
-    color-mix(in oklab, var(--void) 56%, transparent) 0%,
-    color-mix(in oklab, var(--void) 20%, transparent) 62%,
+    color-mix(in oklab, var(--void) 78%, transparent) 0%,
+    color-mix(in oklab, var(--void) 46%, transparent) 62%,
     transparent 100%);
-  transition: transform 520ms var(--ease-out);
 }
 .nav::after {
   content: ''; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--void) 88%, transparent), transparent);
-  opacity: 0; transition: opacity 500ms var(--ease-out);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  /* Past the hero the bar sits over copy and imagery, so the plate goes
+     near-solid rather than a wash — this is what makes the menu read. */
+  background: color-mix(in oklab, var(--void) 94%, transparent);
+  opacity: 0; transition: opacity 400ms var(--ease-out);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
   border-bottom: 1px solid transparent;
 }
-.nav.is-stuck::after { opacity: 1; border-bottom-color: var(--line); }
-.nav.is-hidden { transform: translateY(-105%); }
+.nav.is-stuck::after { opacity: 1; border-bottom-color: var(--line-strong); }
 
 .nav__inner {
   max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter);
@@ -91,8 +92,8 @@
 .nav__links { display: flex; gap: clamp(1rem, 2.2vw, 2.25rem); }
 .nav__links a {
   position: relative; overflow: hidden;
-  font-family: var(--font-mono); font-size: var(--step--2);
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-dim);
+  font-family: var(--font-mono); font-size: var(--step--1);
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone);
   padding-block: 0.35rem;
   transition: color var(--dur) var(--ease-out);
 }
@@ -101,7 +102,8 @@
   background: var(--ember); transform: scaleX(0); transform-origin: right;
   transition: transform 500ms var(--ease-out);
 }
-.nav__links a:hover, .nav__links a.is-active { color: var(--bone); }
+.nav__links a:hover { color: var(--ember); }
+.nav__links a.is-active { color: var(--ember); }
 .nav__links a:hover::after, .nav__links a.is-active::after { transform: scaleX(1); transform-origin: left; }
 .nav__links a:active { color: var(--ember); }
 
@@ -128,7 +130,13 @@
 @keyframes eq { from { height: 3px } to { height: 11px } }
 
 /* 2.75rem = 44px: the minimum comfortable touch target. */
-.nav__burger { display: none; width: 2.75rem; height: 2.75rem; place-items: center; position: relative; }
+.nav__burger {
+  display: none; width: 2.75rem; height: 2.75rem; place-items: center; position: relative;
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  background: color-mix(in oklab, var(--bone) 5%, transparent);
+  transition: border-color var(--dur) var(--ease-out), background var(--dur) var(--ease-out);
+}
+.nav__burger:hover { border-color: var(--ember); background: color-mix(in oklab, var(--ember) 10%, transparent); }
 .nav__burger i {
   position: absolute; left: 50%; width: 1.15rem; height: 1px; background: var(--bone);
   transition: transform 400ms var(--ease-out), opacity 200ms;

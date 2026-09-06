@@ -16,21 +16,10 @@ export function initNav() {
      A dead band around the last committed position: without it, the pixel of
      jitter at the end of an eased scroll flips the header between hidden and
      shown while it is still mid-transition. */
-  const DEADBAND = 6;
-  let lastY = 0;
-  let jumpUntil = 0;   // set while an anchor tween is running
+  // The menu is always visible: it never hides on scroll-down. Past the hero
+  // it gains its backdrop plate so the links keep contrast over content.
   bus.on('scroll', (s) => {
     nav.classList.toggle('is-stuck', s.scroll > 24);
-    const goingDown = s.scroll > lastY + DEADBAND;
-    const goingUp   = s.scroll < lastY - DEADBAND;
-    if (!goingDown && !goingUp) return;
-    lastY = s.scroll;
-    if (drawer?.classList.contains('is-open')) return;
-    // Clicking a nav link and watching the nav slide away is nonsense — the
-    // header did not go anywhere, the page did.
-    if (performance.now() < jumpUntil) return;
-    if (goingDown && s.scroll > state.h * 0.9) nav.classList.add('is-hidden');
-    else if (goingUp) nav.classList.remove('is-hidden');
   });
 
   /* ---- reading progress ----
@@ -116,8 +105,7 @@ export function initNav() {
     // Focus goes back to the burger, which is visible; leaving it on a drawer
     // link would strand it inside a subtree that is about to become inert.
     closeDrawer();
-    jumpUntil = performance.now() + 1500;   // longest jumpDuration + a beat
-    nav.classList.remove('is-hidden');
+    
     scrollTo(id, id === '#top' ? 0 : -8);
     focusTarget(node);
     history.replaceState(null, '', id);
@@ -137,7 +125,7 @@ export function initNav() {
   function openDrawer() {
     if (!drawer || drawer.classList.contains('is-open')) return;
     lastFocused = document.activeElement;
-    nav.classList.remove('is-hidden');       // never strand the close button
+           // never strand the close button
     drawer.classList.add('is-open');
     drawer.removeAttribute('inert');
     inerted = [...document.body.children].filter((el) =>
