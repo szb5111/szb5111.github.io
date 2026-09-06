@@ -147,7 +147,7 @@
 .nav__burger[aria-expanded="true"] i:nth-child(1) { transform: translate(-50%, 0) rotate(45deg); }
 .nav__burger[aria-expanded="true"] i:nth-child(2) { transform: translate(-50%, 0) rotate(-45deg); }
 
-@media (max-width: 1000px) {
+@media (max-width: 880px) {
   .nav__links { display: none; }
   .nav__burger { display: grid; }
 }
@@ -157,7 +157,13 @@
   .nav__sound-label { display: none; }
   .nav__sound { padding: 0.5rem 0.7rem; }
 }
-@media (max-width: 620px) { .nav__cta { display: none; } }
+@media (max-width: 620px) {
+  /* Keep booking one tap away on a phone: shrink the CTA rather than drop it,
+     otherwise mid-page the only route is burger -> Book a call. */
+  .nav__cta { padding: 0.55em 0.9em; letter-spacing: 0.06em; }
+  .nav__cta .btn-arrow { display: none; }
+  .nav__sound { display: none; }
+}
 
 /* ══════════════════════ DRAWER ══════════════════════ */
 .drawer {
